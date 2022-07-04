@@ -1,30 +1,27 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <NavVue />
+  <div class="container">
+    <router-view />
+  </div>
+  
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+  import NavVue from './components/NavVue.vue'
+  import axios from 'axios'
+  
+export default {
+  
+  name: 'App',
+  components: {
+    NavVue,
+  },
+  
+   async created() {
+    const response = await axios.get('user/me');
 
-nav {
-  padding: 30px;
+    this.$store.dispatch('user',response.data);
+  }
+  
 }
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+</script>
