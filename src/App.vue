@@ -17,10 +17,10 @@ export default {
     NavVue,
   },
   
-   async created() {
+   async  created() {
     const response = await axios.get('user/me');
-
     this.$store.dispatch('user',response.data);
+    
   }
   
 }

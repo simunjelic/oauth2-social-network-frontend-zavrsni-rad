@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Top navbar</a>
+    <a class="navbar-brand" href="#">ProgresSUM</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -10,20 +10,42 @@
         <li class="nav-item">
           <router-link class="nav-link " to="/">Home</router-link>
         </li>
+        <li class="nav-item" v-if="user">
+          <router-link class="nav-link "  to="/following">Following</router-link>
+        </li>
+        <li class="nav-item" v-if="user">
+          <router-link class="nav-link "  to="/followers">Followers</router-link>
+        </li>
+        
+        <li class="nav-item" v-if="user">
+          <router-link class="nav-link "  to="/search">Search</router-link>
+        </li>
+        
+      </ul>
+      <!--<form class="d-flex" @submit.prevent="submitSerach" role="search">
+        <input class="form-control me-2" v-model="email" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>-->
+      <ul class="navbar-nav mb-2 mb-md-0">
         <li class="nav-item " v-if="!user">
           <router-link class="nav-link " to="/login">Login</router-link>
         </li>
         <li class="nav-item" v-if="!user">
           <router-link class="nav-link "  to="/register">Sign Up</router-link>
         </li>
-        <li class="nav-item" v-if="user">
-          <a class="nav-link "  href="javascript:void(0)" @click="handleClick">Logout</a>
-        </li>
-      </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+        <li class="nav-item dropdown" v-if="user">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ user.name }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item"  href="javascript:void(0)"  @click="handleClick">Logout</a>
+        </div>
+      </li>
+        </ul>
+      
     </div>
   </div>
 </nav>
@@ -33,6 +55,11 @@
   import { mapGetters } from 'vuex';
     export default {
         name: 'NavBar',
+        data() {
+          return {
+            name: ''
+          }
+        },
         methods: {
           handleClick() {
             localStorage.removeItem('token');
@@ -40,7 +67,8 @@
             this.$store.dispatch('user',null)
 
             this.$router.push("/login")
-          }
+          },
+          
         },
         computed: {
           ...mapGetters(['user'])

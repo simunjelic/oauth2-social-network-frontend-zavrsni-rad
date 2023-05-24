@@ -2,6 +2,7 @@
 <main class="form-signin w-100 m-auto container">
     <div class="container">
   <form @submit.prevent="handleSubmit">
+  <ErrorMsg v-if="error" :error="error"/>
     <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
 
     <div class="form-floating">
@@ -29,6 +30,7 @@
     <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
     <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
   </form>
+ 
   </div>
 </main>
     
@@ -36,19 +38,24 @@
 
 <script>
 import axios from 'axios'
+import ErrorMsg from '@/components/ErrorVue.vue';
     export default {
         name: "RegisterVue",
+        components: {
+          ErrorMsg
+        },
         data() {
           return {
             name: "",
             email: "",
             password: "",
-            confirmPassword: ""
+            confirmPassword: "",
+            error: ""
           }
         },
         methods: {
          async handleSubmit(){
-            
+            try{
             const response = await axios.post('auth/signup',{
             name: this.name,
             email: this.email,
@@ -56,7 +63,9 @@ import axios from 'axios'
             })
               console.log(response)
               this.$router.push('/login')
-            
+            }catch(e){
+              this.error="Error ocured!"
+            }
           }
         }
     }
